@@ -52,7 +52,7 @@ Model for user
 
 ### View
 - Home
-    - dasHboard
+    - dashboard
       - insightBanner
       - reminders
     - addBuddy()
@@ -74,7 +74,7 @@ Model for user
     - where you are
     - change password
     - logout
--O nboard
+- Onboard
     - sign up
     - batch add buddies
 
