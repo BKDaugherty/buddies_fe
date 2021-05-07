@@ -1,3 +1,4 @@
+export { AdminControls } from "./AdminControls";
 export { App } from "./App";
 export { Buddy } from "./Buddy";
 export { BuddyList } from "./BuddyList";
