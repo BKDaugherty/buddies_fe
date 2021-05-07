@@ -1,9 +1,7 @@
 import React, { Fragment } from "react"
 
-const InteractionList = () => {
+export const InteractionList = () => {
 	return (
 		<Fragment/>
 	);
 };
-
-export default InteractionList;

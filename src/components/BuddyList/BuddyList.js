@@ -1,9 +1,7 @@
 import React, { Fragment } from "react"
 
-const BuddyList = () => {
+export const BuddyList = () => {
 	return (
 		<Fragment/>
 	);
 };
-
-export default BuddyList;

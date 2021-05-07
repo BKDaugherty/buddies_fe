@@ -1,1 +1,1 @@
-export Interaction from "./Interaction";
+export { Interaction } from "./Interaction";

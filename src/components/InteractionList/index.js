@@ -1,1 +1,1 @@
-export InteractionList from "./InteractionList";
+export { InteractionList } from "./InteractionList";

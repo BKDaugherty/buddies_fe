@@ -1,9 +1,7 @@
 import React, { Fragment } from "react";
 
-const Interaction = () => {
+export const Interaction = () => {
 	return (
 		<Fragment/>
 	);
 };
-
-export default Interaction;

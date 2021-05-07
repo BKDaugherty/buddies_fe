@@ -1,2 +1,2 @@
-export Home from "./Home";
-export Landing from "./Landing";
+export { Home } from "./Home";
+export { Landing } from "./Landing";

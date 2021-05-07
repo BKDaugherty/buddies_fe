@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { Dashboard, BuddyList } from "../../components"
 
-const Home = () => {
+export const Home = () => {
 	return (
 		<Fragment>
 			<Dashboard/>
@@ -10,5 +10,3 @@ const Home = () => {
 		</Fragment>
 	);
 };
-
-export default Home;

@@ -1,9 +1,7 @@
 import React, { Fragment } from "react"
 
-const Landing = () => {
+export const Landing = () => {
 	return (
 		<Fragment/>
 	);
 };
-
-export default Landing;
