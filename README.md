@@ -13,6 +13,13 @@ the gaps that our imperfect memories leave behind. With Buddies, you can
 - has space for birthday, notes
 - NOT social
 
+### Development
+
+Open Chrome with no cors / security until we make that work (run this in your terminal)
+```
+open -na Google\ Chrome --args --user-data-dir=/tmp/temporary-chrome-profile-dir --disable-web-security
+```
+
 ### Component Structure
 
 ...
