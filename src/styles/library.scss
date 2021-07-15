@@ -1,0 +1,42 @@
+@mixin full-width {
+	margin: 0;
+	padding: 0;
+}
+
+@mixin margin($vertical: 0, $horizontal: 0) {
+	margin: $vertical $horizontal;
+}
+
+@mixin padding($vertical: 0, $horizontal: 0) {
+	padding: $vertical $horizontal;
+}
+
+@mixin reset($selectors...) {
+	@for $i from 0 to length($selectors) {
+		#{nth($selectors, $i + 1)} {
+			margin: 0;
+			padding: 0;
+		}
+	}
+}
+
+@mixin fill($selectors...) {
+	@for $i from 0 to length($selectors) {
+		#{nth($selectors, $i + 1)} {
+			width: 100vw;
+			height: 100vh;
+		}
+	}
+}
+
+@mixin centered($dir, $spacing: space-around) {
+	display: flex;
+	flex-direction: $dir;
+	justify-content: $spacing;
+	align-items: center;
+}
+
+@mixin set-colors($foreground, $background) {
+	color: $foreground;
+	background-color: $background;
+}

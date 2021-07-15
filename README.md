@@ -27,7 +27,7 @@ open -na Google\ Chrome --args --user-data-dir=/tmp/temporary-chrome-profile-dir
 
 We use [Prettierjs](https://prettier.io/docs/en/options.html) to format our code. The configuration is defined in `/.prettierrc.json`, and the options for config are [defined here](https://prettier.io/docs/en/options.html)
 
-Run the linter with `prettier src` in the root directory of the repo.
+Run the linter with `yarn prettier --write .` in the root directory of the repo.
 
 ### Component Structure
 

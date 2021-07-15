@@ -1,0 +1,43 @@
+@use "library" as lib;
+
+$margin-horizontal: 15vw;
+$vertical-spacing: 16px;
+$white: #fff;
+$accent: #bc7777;
+
+#root {
+	font-family: "Helvetica-Neue", sans-serif;
+}
+
+@include lib.reset(h1, h2, h3, h4, h5, h6, p, div, body, #root);
+@include lib.fill(body, #root);
+
+@mixin left-right-margin {
+	@include lib.margin(0, $margin-horizontal);
+}
+
+@mixin top-bottom-margin {
+	@include lib.margin($vertical-spacing)
+}
+
+@mixin top-bottom-padding {
+	@include lib.padding($vertical-spacing)
+}
+
+@mixin primary-color {
+	@include lib.set-colors($white, $accent);
+}
+
+#header {
+	@include lib.full-width;
+	@include top-bottom-padding;
+	@include primary-color;
+
+	.container {
+		@include left-right-margin;
+
+		&.centered {
+			@include lib.centered(row, space-between);
+		}
+	}
+}

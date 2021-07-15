@@ -8,6 +8,8 @@ import { App } from "./components";
 
 import reportWebVitals from "./reportWebVitals";
 
+import "./styles/styles.scss";
+
 const store = createStore(rootReducer);
 
 ReactDOM.render(

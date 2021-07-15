@@ -5,7 +5,7 @@ import { Header, Footer } from "..";
 export const App = () => {
 	return (
 		<Fragment>
-			<Header />
+			<Header/>
 			<Home />
 			<Footer />
 		</Fragment>

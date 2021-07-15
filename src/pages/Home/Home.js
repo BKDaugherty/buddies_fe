@@ -6,7 +6,6 @@ export const Home = () => {
 		<Fragment>
 			<Dashboard />
 			<BuddyList />
-			<AdminControls />
 		</Fragment>
 	);
 };
