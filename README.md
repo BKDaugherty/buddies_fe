@@ -23,6 +23,12 @@ Open Chrome with no cors / security until we make that work (run this in your te
 open -na Google\ Chrome --args --user-data-dir=/tmp/temporary-chrome-profile-dir --disable-web-security
 ```
 
+#### Linter
+
+We use [Prettierjs](https://prettier.io/docs/en/options.html) to format our code. The configuration is defined in `/.prettierrc.json`, and the options for config are [defined here](https://prettier.io/docs/en/options.html)
+
+Run the linter with `prettier src` in the root directory of the repo.
+
 ### Component Structure
 
 ...
