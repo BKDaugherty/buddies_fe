@@ -3,17 +3,17 @@
 This application will augment your interpersonal intelligence, and fill in
 the gaps that our imperfect memories leave behind. With Buddies, you can
 
-- keep track of who you hahve and hahven't talked to
-- jot down notes about a person, keyed to important events
-- configure reminders to reach out and reconnect
+-   keep track of who you hahve and hahven't talked to
+-   jot down notes about a person, keyed to important events
+-   configure reminders to reach out and reconnect
 
 ### Things we care about
 
-- remembering these you did / heard about / talked about
-- remembering when it was you last talked
-- encouraging to reach out more
-- has space for birthday, notes
-- NOT social
+-   remembering these you did / heard about / talked about
+-   remembering when it was you last talked
+-   encouraging to reach out more
+-   has space for birthday, notes
+-   NOT social
 
 ### Development
 
@@ -71,91 +71,91 @@ Model for user
 
 ### View
 
-- Home
-  - dashboard
-    - insightBanner
-    - reminders
-  - addBuddy()
-  - addInteraction()
-- BuddyList
-  - abbrev. details
-- BuddyInteractionList
-  - details
-  - interactions
-- InteractionSearchResultList
-  - interactions
-  - tap takes you to BuddyInteractionList
-- AddInteraction
-  - populate fields
-- AddBuddy
-  - populate fields
-- Preferences
-  - push notifications
-  - where you are
-  - change password
-  - logout
-- Onboard
-  - sign up
-  - batch add buddies
+-   Home
+    -   dashboard
+        -   insightBanner
+        -   reminders
+    -   addBuddy()
+    -   addInteraction()
+-   BuddyList
+    -   abbrev. details
+-   BuddyInteractionList
+    -   details
+    -   interactions
+-   InteractionSearchResultList
+    -   interactions
+    -   tap takes you to BuddyInteractionList
+-   AddInteraction
+    -   populate fields
+-   AddBuddy
+    -   populate fields
+-   Preferences
+    -   push notifications
+    -   where you are
+    -   change password
+    -   logout
+-   Onboard
+    -   sign up
+    -   batch add buddies
 
 ### Controller
 
-- Search
-  - Interaction
-    - date, participants, tags?
-- BuddyRoulette
-  - use heuristics to choose
+-   Search
+    -   Interaction
+        -   date, participants, tags?
+-   BuddyRoulette
+    -   use heuristics to choose
 
 ### APIs
 
 SignUp
 
-- args
-  - email
-  - password
-- return
-  - user
+-   args
+    -   email
+    -   password
+-   return
+    -   user
 
 Login
 
-- args
-  - email
-  - password
-- return
-  - user
+-   args
+    -   email
+    -   password
+-   return
+    -   user
 
 UpdatePreferences
 
-- args
-  - notifications
-  - location
-- return
-  - status code
+-   args
+    -   notifications
+    -   location
+-   return
+    -   status code
 
 CreateBuddy
 
-- args
-  - buddyData
-- args
-  - Buddy
+-   args
+    -   buddyData
+-   args
+    -   Buddy
 
 UpdateBuddy
 
-- args
-  - buddyDataWithId
-- args
-  - Buddy
+-   args
+    -   buddyDataWithId
+-   args
+    -   Buddy
 
 DeleteBuddy
 
-- args
-  - buddy.id
-- return
-  - status code
+-   args
+    -   buddy.id
+-   return
+    -   status code
 
 GetBuddies
 
-- args
-  - user.id
-- return
-  - buddies
+-   args
+    -   user.id
+-   return
+    -   buddies
