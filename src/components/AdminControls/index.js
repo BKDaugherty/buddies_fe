@@ -1,1 +1,1 @@
-export { AdminControls } from "./AdminControls.jsx";
+export { AdminControls } from "./AdminControls.js";

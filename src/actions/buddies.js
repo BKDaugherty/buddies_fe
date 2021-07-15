@@ -8,5 +8,7 @@ const actions = {
 // actions. (Unsure if this is actually useful yet...)
 const action_generator = (action) => (data) => {
   // The action generator relies on Redux Thunk Middleware to pass it these arguments
-  return (dispatch, getState) => {};
+    return (dispatch, getState) => {
+	return dispatch({
+    };
 };

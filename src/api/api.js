@@ -4,76 +4,76 @@ const BUDDIES_API = "https://buddies-backend.herokuapp.com/";
 // Run the frontend against a local instance of the buddies backend
 // const BUDDIES_API = 'http://localhost:9001/';
 
-const get_auth_header = (jwt, headers = {}) => {
+const getAuthHeader = (jwt, headers = {}) => {
   headers["Authorization"] = "Bearer " + jwt;
   return headers;
 };
 
-const auth_api_post_call = (endpoint) => (jwt) => async (body) => {
-  return api_post_call(endpoint)(get_auth_header(jwt))(body);
+const authApiPostCall = (endpoint) => (jwt) => async (body) => {
+  return apiPostCall(endpoint)(getAuthHeader(jwt))(body);
 };
 
 // Curried function to share functionality between POST requests. Will be more
 // useful when we add security
-const api_post_call =
+const apiPostCall =
   (endpoint) =>
-  (additional_headers = {}) =>
+  (additionalHeaders = {}) =>
   async (body) => {
     const url = BUDDIES_API + endpoint;
-    additional_headers["Content-Type"] = "application/json";
+    additionalHeaders["Content-Type"] = "application/json";
     return fetch(url, {
       method: "POST",
-      headers: additional_headers,
+      headers: additionalHeaders,
       body: JSON.stringify(body),
     }).then((response) => {
       return response.json();
     });
   };
 
-const get_user_data = (jwt) => async (user_id) => {
-  const headers = get_auth_header(jwt);
+const getUserData = (jwt) => async (userId) => {
+  const headers = getAuthHeader(jwt);
 
-  return fetch(BUDDIES_API + "user/" + user_id, {
+  return fetch(BUDDIES_API + "user/" + userId, {
     headers: headers,
     method: "GET",
   }).then((response) => {
     return response.json().then((data) => {
-      let buddy_to_interaction_map = new Map();
+      let buddyToInteractionMap = new Map();
       for (const interaction of Object.values(data.interactions)) {
-        for (const participant_id of Object.values(interaction.participants)) {
-          if (!buddy_to_interaction_map.has(participant_id)) {
-            buddy_to_interaction_map.set(participant_id, []);
+        for (const participantId of Object.values(interaction.participants)) {
+          if (!buddyToInteractionMap.has(participantId)) {
+            buddyToInteractionMap.set(participantId, []);
           }
-          buddy_to_interaction_map.get(participant_id).push(interaction);
+          buddyToInteractionMap.get(participantId).push(interaction);
         }
       }
       return {
         buddies: data.buddies,
         interactions: data.interactions,
-        buddy_to_interaction_map: buddy_to_interaction_map,
+        buddyToInteractionMap: buddyToInteractionMap,
       };
     });
   });
 };
 
-const sign_up = (email, password) => {
-  return api_post_call("sign_up")()({
+const signup = (email, password) => {
+  return apiPostCall("sign_up")()({
     email: email,
     password: password,
   });
 };
 
 const login = (email, password) => {
-  return api_post_call("login")()({
+  return apiPostCall("login")()({
     email: email,
     password: password,
   });
 };
 
-const create_buddy =
-  (jwt) => (user_id, name, notes, birthday, cadence, location) => {
-    return auth_api_post_call("buddy/create")(jwt)({
-      user_id: user_id,
+const createBuddy =
+  (jwt) => (userId, name, notes, birthday, cadence, location) => {
+    return authApiPostCall("buddy/create")(jwt)({
+      user_id: userId,
       name: name,
       notes: notes,
       birthday: birthday,
@@ -82,96 +82,97 @@ const create_buddy =
     });
   };
 
-const create_interaction = (jwt) => (user_id, notes, participants, date) => {
-  return auth_api_post_call("interaction/create")(jwt)({
-    user_id: user_id,
+const createInteraction = (jwt) => (userId, notes, participants, date) => {
+  return authApiPostCall("interaction/create")(jwt)({
+    user_id: userId,
     notes: notes,
     participants: participants,
     date: date,
   });
 };
 
-const archive_buddy = (jwt) => (user_id, buddy_id) =>
-  auth_api_post_call(jwt)("buddy/archive")({
-    user_id: user_id,
-    buddy_id: buddy_id,
+const archiveBuddy = (jwt) => (userId, buddyId) =>
+  authApiPostCall(jwt)("buddy/archive")({
+    user_id: userId,
+    buddy_id: buddyId,
   });
 
-const archive_interaction = (jwt) => (user_id, interaction_id) =>
-  auth_api_post_call(jwt)("interaction/archive")({
-    user_id: user_id,
-    interaction_id: interaction_id,
+const archiveInteractions = (jwt) => (userId, interactionId) =>
+  authApiPostCall(jwt)("interaction/archive")({
+    user_id: userId,
+    interaction_id: interactionId,
   });
 
 // The main endpoints of the buddy service coupled into one object
-const buddies_service = {
-  archive_buddy: archive_buddy,
-  archive_interaction: archive_interaction,
-  create_buddy: create_buddy,
-  create_interaction: create_interaction,
-  update_buddy: (jwt) => auth_api_post_call("buddy/update")(jwt),
-  update_interaction: (jwt) => auth_api_post_call("interaction/update")(jwt),
-  get_user_data: get_user_data,
+const buddiesService = {
+  archiveBuddy: archiveBuddy,
+  archiveInteraction: archiveInteractions,
+  createBuddy: createBuddy,
+  createInteraction: createInteraction,
+  updateBuddy: (jwt) => authApiPostCall("buddy/update")(jwt),
+  updateInteraction: (jwt) => authApiPostCall("interaction/update")(jwt),
+  getUserData: getUserData,
   login: login,
-  sign_up: sign_up,
+  signup: signup,
 };
 
 // Debug function to call the API and generate some fake data
-const setup_fake_data = async (fake_user_email, fake_user_password) => {
-  let resp = await buddies_service.login(fake_user_email, fake_user_password);
+const setupFakeData = async (fakeUserEmail, fakeUserPassword) => {
+  let resp = await buddiesService.login(fakeUserEmail, fakeUserPassword);
   let user = resp.user;
   let jwt = resp.jwt;
 
   console.log("Created User", user);
-  const user_id = resp.user.id;
+  const userId = resp.user.id;
 
-  const fake_buddies = [
-    // user_id, name, notes, birthday (MM-DD-YYYY)
+  const fakeBuddies = [
+    // userId, name, notes, birthday (MM-DD-YYYY)
     [
-      user_id,
+      userId,
       "Brendon Daugherty",
       "Brendon (also known as Ken) plays bass",
       "10-02-1997",
     ],
     [
-      user_id,
+      userId,
       "Porter Sherman",
       "Porter is the lead guitarist of 'The Band'",
       "07-21-1997",
     ],
-    [user_id, "Charlie Coburn", "Charlie is a noodly boi", "07-01-1997"],
+    [userId, "Charlie Coburn", "Charlie is a noodly boi", "07-01-1997"],
     [
-      user_id,
+      userId,
       "Hannah Brenchley",
       "Hannah is an absolute pal, and knows the best muzak like parcels",
       "12-23-1997",
     ],
     [
-      user_id,
+      userId,
       "Miela Mayer",
       "Miela is a hectic human being that we all know and love",
       "07-17-1996",
     ],
   ];
 
-  const fake_interactions = [
-    // user_id, notes, participants, Option<date>
-    [user_id, "Told me that they are quitting their job", [0], "10-02-2021"],
+  const fakeInteractions = [
+    // userId, notes, participants, Option<date>
+    [userId, "Told me that they are quitting their job", [0], "10-02-2021"],
     [
-      user_id,
+      userId,
       "Told me they are stoked for their sister's wedding",
       [2],
       "07-03-2020",
     ],
-    [user_id, "Told me they started dating some new guy named jeremy", [3]],
-    [user_id, "Told me they are going to visit their pal", [2, 4]],
+    [userId, "Told me they started dating some new guy named jeremy", [3]],
+    [userId, "Told me they are going to visit their pal", [2, 4]],
   ];
+
   let buddies = [];
-  for (const fake_buddy of fake_buddies) {
-    let [user_id, name, notes, birthday] = fake_buddy;
-    console.log(buddies_service.create_buddy(jwt));
-    let resp = await buddies_service.create_buddy(jwt)(
-      user_id,
+  for (const fakeBuddy of fakeBuddies) {
+    let [userId, name, notes, birthday] = fakeBuddy;
+    console.log(buddiesService.createBuddy(jwt));
+    let resp = await buddiesService.createBuddy(jwt)(
+      userId,
       name,
       notes,
       birthday
@@ -180,24 +181,24 @@ const setup_fake_data = async (fake_user_email, fake_user_password) => {
     buddies.push(resp.buddy);
   }
 
-  for (const fake_interaction of fake_interactions) {
-    let [user_id, notes, participant_indices, date] = fake_interaction;
+  for (const fakeInteraction of fakeInteractions) {
+    let [userId, notes, participantIndices, date] = fakeInteraction;
     let participants = [];
-    for (const index in participant_indices) {
+    for (const index in participantIndices) {
       participants.push(buddies[index].id);
     }
-    await buddies_service.create_interaction(jwt)(
-      user_id,
+    await buddiesService.createInteraction(jwt)(
+      userId,
       notes,
       participants,
       date
     );
   }
-  return buddies_service.get_user_data(jwt)(user_id);
+  return buddiesService.getUserData(jwt)(userId);
 };
 
-const debug_service = {
-  setup_fake_data: setup_fake_data,
+const debugService = {
+  setupFakeData: setupFakeData,
 };
 
-export { buddies_service, debug_service };
+export { buddiesService, debugService };
