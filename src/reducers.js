@@ -1,20 +1,7 @@
 import { combineReducers } from "redux";
-
-// A helper function to create uniform reducers and to avoid switch statements
-const createReducer =
-	(initialState, actionStateUpdateMap) =>
-	(state = initialState, action) => {
-		if (!(action.type in actionStateUpdateMap)) {
-			console.warn(
-				"Action Type " +
-					action.type +
-					" was not found in the reducer. Returning default state."
-			);
-			return state;
-		} else {
-			return actionStateUpdateMap[action.type](state, action);
-		}
-	};
+// TODO -> Make this follow the index.js pattern
+import { userInfoReducer } from "./redux/UserInfo";
+import { createReducer } from "./redux/common";
 
 // Defines all actions that can come from a buddy list
 const BuddyActions = {
@@ -27,9 +14,11 @@ const BuddyActions = {
 const buddyActionStateUpdateMap = {
 	[BuddyActions.create]: (state, action) => {
 		state.pending_buddies.append(action.payload);
+		return state;
 	},
 	[BuddyActions.get_all]: (state, action) => {
 		state.buddies = action.payload;
+		return state;
 	},
 };
 
@@ -65,9 +54,17 @@ const buddyListReducer = createReducer(
 	buddyActionStateUpdateMap
 );
 
+// This is hard. Requires me to know arguments of internal function.
+// Should they all just take kwargs objects?
+// Or maybe I could pass it in?
+/* const create_work = () => {
+ *
+ * } */
+
 // Combine all existing reducers into one that will be applied to the store
 const rootReducer = combineReducers({
 	buddy_list: buddyListReducer,
+	user: userInfoReducer,
 });
 
 export default rootReducer;
