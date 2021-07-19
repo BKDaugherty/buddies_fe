@@ -96,10 +96,11 @@ const userInfoActionStateUpdateMap = {
 	},
 	[UserInfoActions.login + "/success"]: (state, action) => {
 		state.login = asyncStateSuccess(state.login);
-		state.authenticated = true;
-		state.auth_jwt = action.payload.jwt;
+		state.authentication.is_authenticated = true;
+		state.authentication.jwt = action.payload.jwt;
+		state.authentication.id = action.payload.user.id;
 		state.user_info.email = action.payload.user.email;
-		state.user_info.id = action.payload.user.id;
+
 		return state;
 	},
 };
