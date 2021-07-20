@@ -1,9 +1,8 @@
 import {
 	createReducer,
-	asyncStateRequest,
-	asyncStateSuccess,
-	asyncStateFailure,
 	createAsyncActionInitialState,
+	asyncActionStateUpdateMapGenerator,
+	asyncActionGenerator,
 } from "./common";
 import { buddiesService } from "../api";
 
@@ -11,12 +10,14 @@ import { buddiesService } from "../api";
 // the userInfo slice of the redux store.
 export const UserInfoActions = {
 	login: "user/login",
+	signUp: "user/sign_up",
 };
 
 // Defines the initial state of the user Info slice of the state
 const userInfoInitialState = {
 	// State controlling the login intent
 	login: createAsyncActionInitialState(),
+	signUp: createAsyncActionInitialState(),
 	// Information related to authentication
 	authentication: {
 		// Whether or not the user is authenticated
@@ -33,57 +34,63 @@ const userInfoInitialState = {
 	},
 };
 
-// Given an action name, returns a function that can dispatch an action
-// to perform the work associated with an action.
-// TODO: Make this generic.
-export const userActionGenerator = {
-	// Here's an example of this defined literally. Can we generate this?
-	[UserInfoActions.login]: (email, password) => (dispatch) => {
-		// Let the redux store know that we are requesting to login
-		dispatch({ type: UserInfoActions.login + "/request" });
-		buddiesService
-			.login(email, password)
-			.then((payload) => {
-				// Pass whatever the REST API gave to the corresponding reducer
-				dispatch({
-					type: UserInfoActions.login + "/success",
-					payload,
-				});
-			})
-			.catch((error) => {
-				// How do I surface this error to the user in a unified and
-				// helpful way?  Should the most recent error message should be
-				// stored? Also there should be a utility to process this
-				// error. Do we decide this is an error based on  status code?
-				dispatch({
-					type: UserInfoActions.login + "/failure",
-					payload: error,
-				});
-				console.error("Something went wrong: " + error);
+const loginAction = asyncActionGenerator(
+	UserInfoActions.login,
+	(args, dispatch, getState) => buddiesService.login(args),
+	{
+		success_logic: (payload, { args, dispatch, getState }) => {},
+		failure_logic: (error, { args, dispatch, getState }) => {},
+	}
+);
+
+const signUpAction = asyncActionGenerator(
+	UserInfoActions.signUp,
+	(args, dispatch, getState) => buddiesService.signUp(args),
+	{
+		success_logic: (payload, { args, dispatch, getState }) => {
+			// On sign up success, call login
+			const loginThunk = userActionGenerator[UserInfoActions.login]({
+				email: args.email,
+				password: args.password,
 			});
-	},
+			dispatch(loginThunk);
+		},
+		failure_logic: (error, { args, dispatch, getState }) => {},
+	}
+);
+
+const signUpActionStateUpdateMap = asyncActionStateUpdateMapGenerator(
+	UserInfoActions.signUp,
+	"signUp"
+);
+
+const loginActionStateUpdateMap = asyncActionStateUpdateMapGenerator(
+	UserInfoActions.login,
+	"login",
+	{
+		success_logic: (state, action) => {
+			state.authentication.is_authenticated = true;
+			state.authentication.jwt = action.payload.jwt;
+			state.authentication.id = action.payload.user.id;
+			state.user_info.email = action.payload.user.email;
+			return state;
+		},
+		request_logic: (state, action) => state,
+		failure_logic: (state, action) => {
+			state.authenticated = false;
+			return state;
+		},
+	}
+);
+
+export const userActionGenerator = {
+	...loginAction,
+	...signUpAction,
 };
 
-// Maps an action name to the update logic that should be performed
-// when an action has been completed.
-const userInfoActionStateUpdateMap = {
-	[UserInfoActions.login + "/request"]: (state, action) => {
-		state.login = asyncStateRequest(state.login);
-		return state;
-	},
-	[UserInfoActions.login + "/failure"]: (state, action) => {
-		state.login = asyncStateFailure(state.login);
-		state.authenticated = false;
-		return state;
-	},
-	[UserInfoActions.login + "/success"]: (state, action) => {
-		state.login = asyncStateSuccess(state.login);
-		state.authentication.is_authenticated = true;
-		state.authentication.jwt = action.payload.jwt;
-		state.authentication.id = action.payload.user.id;
-		state.user_info.email = action.payload.user.email;
-		return state;
-	},
+export const userInfoActionStateUpdateMap = {
+	...loginActionStateUpdateMap,
+	...signUpActionStateUpdateMap,
 };
 
 // Exports the reducer to the root reducers module.

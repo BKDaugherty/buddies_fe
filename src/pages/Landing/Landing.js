@@ -11,11 +11,10 @@ export const Landing = () => {
 	const handleSubmit = (evt) => {
 		// Ensure that we don't refresh page on submit
 		evt.preventDefault();
-		console.log("Doing work " + email + " " + password);
-		const loginThunk = userActionGenerator[UserInfoActions.login](
+		const loginThunk = userActionGenerator[UserInfoActions.login]({
 			email,
-			password
-		);
+			password,
+		});
 		dispatch(loginThunk);
 	};
 
