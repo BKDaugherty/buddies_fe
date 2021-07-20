@@ -1,5 +1,5 @@
-import React, { Fragment } from "react";
+import React from "react";
 
 export const Interaction = () => {
-	return <Fragment />;
+	return <h4>I am an interaction</h4>;
 };

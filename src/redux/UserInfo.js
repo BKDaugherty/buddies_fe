@@ -1,17 +1,16 @@
-import { createReducer } from "./common";
+import {
+	createReducer,
+	asyncStateRequest,
+	asyncStateSuccess,
+	asyncStateFailure,
+	createAsyncActionInitialState,
+} from "./common";
 import { buddiesService } from "../api";
 
 // Defines the high level intent of actions that are possible on
 // the userInfo slice of the redux store.
 export const UserInfoActions = {
 	login: "user/login",
-};
-
-// State that exists for asynchronous actions
-const createAsyncActionInitialState = () => {
-	return {
-		pending: false,
-	};
 };
 
 // Defines the initial state of the user Info slice of the state
@@ -65,23 +64,6 @@ export const userActionGenerator = {
 	},
 };
 
-// Helper methods for reducing asyncStateMethods
-// TODO: Pull these into common
-const asyncStateRequest = (state) => {
-	state.pending = true;
-	return state;
-};
-
-const asyncStateSuccess = (state) => {
-	state.pending = false;
-	return state;
-};
-
-const asyncStateFailure = (state) => {
-	state.pending = false;
-	return state;
-};
-
 // Maps an action name to the update logic that should be performed
 // when an action has been completed.
 const userInfoActionStateUpdateMap = {
@@ -100,7 +82,6 @@ const userInfoActionStateUpdateMap = {
 		state.authentication.jwt = action.payload.jwt;
 		state.authentication.id = action.payload.user.id;
 		state.user_info.email = action.payload.user.email;
-
 		return state;
 	},
 };

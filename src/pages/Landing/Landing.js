@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Header, Footer } from "../../components";
 import { userActionGenerator, UserInfoActions } from "../../redux/UserInfo";
 
 export const Landing = () => {

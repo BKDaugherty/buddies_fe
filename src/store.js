@@ -2,6 +2,17 @@ import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
 import rootReducer from "./reducers";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
+
+const persistConfig = {
+	key: "root",
+	storage,
+};
+
+// On browser refresh, merge stored state in localStorage with the initialState of the root
+// reducer
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const composedEnhancer = composeWithDevTools(
 	// Add thunk middleware to allow for asynchronous dispatch via the store.
@@ -9,5 +20,10 @@ const composedEnhancer = composeWithDevTools(
 	applyMiddleware(thunk)
 );
 
-const store = createStore(rootReducer, composedEnhancer);
-export default store;
+const storeGenerator = () => {
+	const store = createStore(persistedReducer, composedEnhancer);
+	const persistor = persistStore(store);
+	return { store, persistor };
+};
+
+export default storeGenerator;
