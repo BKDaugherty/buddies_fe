@@ -4,16 +4,20 @@ $margin-horizontal: 15vw;
 $vertical-spacing: 16px;
 $white: #fff;
 $accent: #bc7777;
+$secondary: #f0f0f0;
+$black: #8d8d8d;
+$default-opacity: 0.5;
 
 #root {
 	font-family: "Helvetica-Neue", sans-serif;
+	@include lib.centered(column, flex-start, center);
 }
 
 @include lib.reset(h1, h2, h3, h4, h5, h6, p, div, body, #root);
 @include lib.fill(body, #root);
 
-@mixin left-right-margin {
-	@include lib.margin(0, $margin-horizontal);
+@mixin left-right-padding {
+	@include lib.padding(0, $margin-horizontal);
 }
 
 @mixin top-bottom-margin {
@@ -24,8 +28,24 @@ $accent: #bc7777;
 	@include lib.padding($vertical-spacing)
 }
 
+@mixin padding {
+	@include lib.padding($vertical-spacing, $vertical-spacing)
+}
+
 @mixin primary-color {
 	@include lib.set-colors($white, $accent);
+}
+
+@mixin matte-color {
+	@include lib.set-colors($black, $secondary)
+}
+
+@mixin background-color {
+	@include lib.set-colors($black, $white)
+}
+
+@mixin inverted-color {
+	@include lib.set-colors($white, $black)
 }
 
 #header {
@@ -34,10 +54,49 @@ $accent: #bc7777;
 	@include primary-color;
 
 	.container {
-		@include left-right-margin;
+		@include left-right-padding;
 
 		&.centered {
 			@include lib.centered(row, space-between);
 		}
 	}
+}
+
+#landing {
+	@include lib.full-width;
+	@include left-right-padding;
+	@include lib.centered(column, center, flex-end);
+}
+
+form {
+	@include padding;
+	@include matte-color;
+	@include lib.centered(column, center, flex-start);
+	@include lib.clear-border(0.75em);
+
+	margin-top: $vertical-spacing;
+
+	.title {
+		margin-bottom: $vertical-spacing / 2;
+	}
+
+	input {
+		@include lib.list-margin($vertical-spacing);
+	}
+}
+
+.field {
+	@include lib.clear-border(0.75em, $black);
+	@include lib.padding(0.5em, 1em);
+
+	&::placeholder {
+		font-style: italic;
+		opacity: $default-opacity;
+	}
+}
+
+.button {
+	@include lib.clear-border(0.75em);
+	@include lib.padding(0.5em, 1em);
+	@include inverted-color;
 }

@@ -7,11 +7,11 @@ export const App = () => {
 	const authenticated = useSelector(
 		(state) => state.user.authentication.is_authenticated
 	);
+
 	return (
 		<Fragment>
 			<Header />
-			{/* TeRnArY oPeRaToRs ArEn'T rEaDaBlE */}
-			{authenticated ? <Home /> : <Landing />}
+				{authenticated ? <Home /> : <Landing />}
 			<Footer />
 		</Fragment>
 	);

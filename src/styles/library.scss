@@ -1,6 +1,7 @@
 @mixin full-width {
 	margin: 0;
 	padding: 0;
+	width: 100%;
 }
 
 @mixin margin($vertical: 0, $horizontal: 0) {
@@ -16,6 +17,7 @@
 		#{nth($selectors, $i + 1)} {
 			margin: 0;
 			padding: 0;
+			box-sizing: border-box;
 		}
 	}
 }
@@ -29,14 +31,35 @@
 	}
 }
 
-@mixin centered($dir, $spacing: space-around) {
+@mixin centered($dir, $spacing: space-around, $align: center) {
 	display: flex;
 	flex-direction: $dir;
 	justify-content: $spacing;
-	align-items: center;
+	align-items: $align;
 }
 
 @mixin set-colors($foreground, $background) {
 	color: $foreground;
 	background-color: $background;
+}
+
+@mixin list-margin($spacing) {
+	@include margin($spacing / 2);
+
+	&:first-child {
+		margin-top: 0;
+	}
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
+@mixin clear-border($radius: 0, $outline-color: #fff) {
+	border-width: 0;
+	border-radius: $radius;
+
+	&:hover, &:active, &:focus {
+		outline-color: $outline-color;
+	}
 }

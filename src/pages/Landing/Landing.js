@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { userActionGenerator, UserInfoActions } from "../../redux/UserInfo";
 
@@ -20,27 +20,25 @@ export const Landing = () => {
 	};
 
 	return (
-		<Fragment>
+		<div id={ "landing" }>
 			<form onSubmit={handleSubmit}>
-				<label>
-					Email:
-					<input
-						type="email"
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
-					/>
-				</label>
-				<br />
-				<label>
-					Password:
-					<input
-						type="password"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-					/>
-				</label>
-				<input type="submit" value="Submit" />
+				<h3 className={"title"}>login</h3>
+				<input
+					className={"field"}
+					type="email"
+					value={email}
+					placeholder={"email"}
+					onChange={(e) => setEmail(e.target.value)}
+				/>
+				<input
+					className={"field"}
+					type="password"
+					value={password}
+					placeholder={"password"}
+					onChange={(e) => setPassword(e.target.value)}
+				/>
+				<input className={"button"} type="submit" value="submit" />
 			</form>
-		</Fragment>
+		</div>
 	);
 };
