@@ -8,7 +8,7 @@ import {
 import { buddiesService } from "../api";
 
 // Defines the high level intent of actions that are possible on
-// the userInfo slice of the redux store.
+// the buddies slice of the redux store.
 export const BuddiesActions = {
 	getUserData: "buddies/get",
 };
