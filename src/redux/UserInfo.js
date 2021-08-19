@@ -7,17 +7,17 @@ import {
 import { buddiesService } from "../api";
 
 // Defines the high level intent of actions that are possible on
-// the userInfo slice of the redux store.
+// the user_info slice of the redux store.
 export const UserInfoActions = {
 	login: "user/login",
-	signUp: "user/sign_up",
+	signup: "user/sign_up",
 };
 
 // Defines the initial state of the user Info slice of the state
 const userInfoInitialState = {
 	// State controlling the login intent
 	login: createAsyncActionInitialState(),
-	signUp: createAsyncActionInitialState(),
+	signup: createAsyncActionInitialState(),
 	// Information related to authentication
 	authentication: {
 		// Whether or not the user is authenticated
@@ -43,9 +43,9 @@ const loginAction = asyncActionGenerator(
 	}
 );
 
-const signUpAction = asyncActionGenerator(
-	UserInfoActions.signUp,
-	(args, dispatch, getState) => buddiesService.signUp(args),
+const signupAction = asyncActionGenerator(
+	UserInfoActions.signup,
+	(args, dispatch, getState) => buddiesService.signup(args),
 	{
 		success_logic: (payload, { args, dispatch, getState }) => {
 			// On sign up success, call login
@@ -59,9 +59,9 @@ const signUpAction = asyncActionGenerator(
 	}
 );
 
-const signUpActionStateUpdateMap = asyncActionStateUpdateMapGenerator(
-	UserInfoActions.signUp,
-	"signUp"
+const signupActionStateUpdateMap = asyncActionStateUpdateMapGenerator(
+	UserInfoActions.signup,
+	"signup"
 );
 
 const loginActionStateUpdateMap = asyncActionStateUpdateMapGenerator(
@@ -77,7 +77,7 @@ const loginActionStateUpdateMap = asyncActionStateUpdateMapGenerator(
 		},
 		request_logic: (state, action) => state,
 		failure_logic: (state, action) => {
-			state.authenticated = false;
+			state.authentication.is_authenticated = false;
 			return state;
 		},
 	}
@@ -85,12 +85,12 @@ const loginActionStateUpdateMap = asyncActionStateUpdateMapGenerator(
 
 export const userActionGenerator = {
 	...loginAction,
-	...signUpAction,
+	...signupAction,
 };
 
 export const userInfoActionStateUpdateMap = {
 	...loginActionStateUpdateMap,
-	...signUpActionStateUpdateMap,
+	...signupActionStateUpdateMap,
 };
 
 // Exports the reducer to the root reducers module.

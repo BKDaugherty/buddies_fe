@@ -76,7 +76,7 @@ const buddiesService = {
 	updateInteraction: authEndpoint("interaction/update"),
 	getUserData: getUserData,
 	login: apiPostCall("login")(),
-	signUp: apiPostCall("sign_up")(),
+	signup: apiPostCall("sign_up")(),
 };
 
 export { buddiesService };

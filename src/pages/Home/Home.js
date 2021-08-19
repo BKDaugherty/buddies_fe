@@ -3,7 +3,7 @@ import { Dashboard, BuddyList } from "../../components";
 import { useDispatch } from "react-redux";
 import { buddiesActionGenerator, BuddiesActions } from "../../redux/Buddies";
 
-export const Home = (props) => {
+export const Home = () => {
 	const dispatch = useDispatch();
 	useEffect(() => {
 		const getUserData =

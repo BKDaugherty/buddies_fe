@@ -2,19 +2,25 @@
 
 $margin-horizontal: 15vw;
 $vertical-spacing: 16px;
+$horizontal-spacing: 4px;
 $white: #fff;
 $accent: #bc7777;
 $secondary: #f0f0f0;
 $black: #8d8d8d;
 $default-opacity: 0.5;
+$border-radius: 0.5em;
 
 #root {
 	font-family: "Helvetica-Neue", sans-serif;
-	@include lib.centered(column, flex-start, center);
+	@include lib.flex(column, flex-start, center);
 }
 
-@include lib.reset(h1, h2, h3, h4, h5, h6, p, div, body, #root);
+@include lib.reset(h1, h2, h3, h4, h5, h6, p, div, body, input, #root);
 @include lib.fill(body, #root);
+
+@mixin left-right-margin {
+	@include lib.margin(0, $margin-horizontal);
+}
 
 @mixin left-right-padding {
 	@include lib.padding(0, $margin-horizontal);
@@ -57,7 +63,7 @@ $default-opacity: 0.5;
 		@include left-right-padding;
 
 		&.centered {
-			@include lib.centered(row, space-between);
+			@include lib.flex(row, space-between);
 		}
 	}
 }
@@ -65,19 +71,28 @@ $default-opacity: 0.5;
 #landing {
 	@include lib.full-width;
 	@include left-right-padding;
-	@include lib.centered(column, center, flex-end);
+	@include lib.flex(column, center, flex-end);
 }
 
 form {
 	@include padding;
 	@include matte-color;
-	@include lib.centered(column, center, flex-start);
-	@include lib.clear-border(0.75em);
+	@include lib.flex(column, center, flex-start);
+	@include lib.clear-border($border-radius);
 
 	margin-top: $vertical-spacing;
 
-	.title {
-		margin-bottom: $vertical-spacing / 2;
+	div {
+		@include lib.flex(row, flex-start);
+
+		.title {
+			margin-bottom: $vertical-spacing / 2;
+			cursor: pointer;
+
+			&:first-child {
+				margin-right: $horizontal-spacing;
+			}
+		}
 	}
 
 	input {
@@ -86,7 +101,7 @@ form {
 }
 
 .field {
-	@include lib.clear-border(0.75em, $black);
+	@include lib.clear-border($border-radius, $black);
 	@include lib.padding(0.5em, 1em);
 
 	&::placeholder {
@@ -96,7 +111,56 @@ form {
 }
 
 .button {
-	@include lib.clear-border(0.75em);
+	@include lib.clear-border($border-radius);
 	@include lib.padding(0.5em, 1em);
 	@include inverted-color;
+
+	&:hover {
+		cursor: pointer;
+		background-color: $accent;
+	}
+}
+
+.active {
+	color: $accent;
+}
+
+.container {
+	@include lib.clear-border($border-radius);
+	@include left-right-padding;
+	@include top-bottom-margin;
+	margin-bottom: 0;
+	width: 100%;
+
+	&.header {
+		@include lib.margin(0, 0);
+	}
+
+	&.dashboard {
+		@include lib.flex(row);
+	}
+}
+
+.panel {
+	@include lib.clear-border($border-radius);
+	@include matte-color;
+	width: 100%;
+	height: 100%;
+
+	&.buddy {
+		@include lib.padding($vertical-spacing, $vertical-spacing);
+
+		h1 {
+			font-size: 1.5em;
+			padding-bottom: $vertical-spacing / 2;
+		}
+	}
+
+	&.half {
+		width: 50%
+	}
+
+	&.quarter {
+		width: 25%
+	}
 }

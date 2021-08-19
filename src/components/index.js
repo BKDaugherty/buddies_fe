@@ -6,3 +6,4 @@ export { Interaction } from "./Interaction";
 export { InteractionList } from "./InteractionList";
 export { Header } from "./Header";
 export { Footer } from "./Footer";
+export { LoginSignup } from "./LoginSignup";

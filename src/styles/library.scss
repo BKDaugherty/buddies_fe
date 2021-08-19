@@ -18,6 +18,7 @@
 			margin: 0;
 			padding: 0;
 			box-sizing: border-box;
+			transition: color 300ms ease-in-out, background-color 300ms ease-in-out;
 		}
 	}
 }
@@ -31,7 +32,7 @@
 	}
 }
 
-@mixin centered($dir, $spacing: space-around, $align: center) {
+@mixin flex($dir, $spacing: space-around, $align: center) {
 	display: flex;
 	flex-direction: $dir;
 	justify-content: $spacing;
