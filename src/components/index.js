@@ -8,3 +8,4 @@ export { Header } from "./Header";
 export { Footer } from "./Footer";
 export { LoginSignup } from "./LoginSignup";
 export { PendingBuddy } from "./PendingBuddy";
+export { PendingInteraction } from "./PendingInteraction";

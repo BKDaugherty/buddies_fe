@@ -22,8 +22,6 @@ export const BuddyList = () => {
 			birthday,
 		});
 		dispatch(buddyCreationThunk);
-		// We also want to somehow set that we are no longer pending on successful
-		// completion. Perhaps pending should be in redux store?
 	};
 
 	const buddies = useSelector((state) => state.buddies.buddies);

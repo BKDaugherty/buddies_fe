@@ -12,7 +12,10 @@ import { buddiesService } from "../api";
 export const BuddiesActions = {
 	getUserData: "buddies/get",
 	createBuddy: "buddies/create",
+	createInteraction: "buddies/create_interaction",
 	startCreateBuddy: "buddies/start_create",
+	startCreateInteraction: "buddies/start_create_interaction",
+	completeCreateInteraction: "buddies/complete_create_interaction",
 };
 
 const buddiesInitialState = {
@@ -80,6 +83,48 @@ const createBuddyStateUpdateMap = asyncActionStateUpdateMapGenerator(
 	}
 );
 
+const createInteractionAction = asyncActionGenerator(
+	BuddiesActions.createInteraction,
+	(args, dispatch, getState) => {
+		const { jwt, user_id } = selectAuthInfo(getState());
+		// We are calling the backend directly here. Important
+		// that all keys are snake case
+		// TODO: Add validation to API call to check this somehow?
+		return buddiesService.createInteraction(jwt)({
+			user_id,
+			...args,
+		});
+	},
+	{
+		success_logic: (payload, { args, dispatch, getState }) => {
+			// After successful creation, refresh user data
+			dispatch(buddiesActionGenerator[BuddiesActions.getUserData]());
+			dispatch({
+				type: BuddiesActions.completeCreateInteraction,
+				// TODO: Find a less brittle way to do this
+				payload: { buddyId: args.participants[0] },
+			});
+		},
+		failure_logic: (error, { args, dispatch, getState }) => {},
+	}
+);
+
+const createInteractionStateUpdateMap = asyncActionStateUpdateMapGenerator(
+	BuddiesActions.createInteraction,
+	"createInteraction",
+	{
+		success_logic: (state, action) => {
+			return state;
+		},
+		request_logic: (state, action) => {
+			return state;
+		},
+		failure_logic: (state, action) => {
+			return state;
+		},
+	}
+);
+
 const getUserDataStateUpdateMap = asyncActionStateUpdateMapGenerator(
 	BuddiesActions.getUserData,
 	"getUserData",
@@ -102,15 +147,28 @@ export const buddiesActionStateUpdateMap = {
 		state.buddyPending = true;
 		return state;
 	},
+	[BuddiesActions.startCreateInteraction]: (state, action) => {
+		const { buddyId } = action.payload;
+		state.pendingInteractions[buddyId] = true;
+		return state;
+	},
+	[BuddiesActions.completeCreateInteraction]: (state, action) => {
+		console.log(action);
+		const { buddyId } = action.payload;
+		state.pendingInteractions[buddyId] = false;
+		return state;
+	},
 };
 
 export const buddiesActionGenerator = {
 	...getUserDataAction,
 	...createBuddyAction,
+	...createInteractionAction,
 };
 
 // Exports the reducer to the root reducers module.
 export const buddiesReducer = createReducer(
 	buddiesInitialState,
-	buddiesActionStateUpdateMap
+	buddiesActionStateUpdateMap,
+	createInteractionStateUpdateMap
 );
