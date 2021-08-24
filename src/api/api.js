@@ -62,7 +62,7 @@ const getUserData =
 		});
 	};
 
-const authEndpoint = (endpoint) => (jwt) => authApiPostCall(jwt)(endpoint);
+const authEndpoint = (endpoint) => (jwt) => authApiPostCall(endpoint)(jwt);
 
 // The main endpoints of the buddy service coupled into one object
 // Checkout https://github.com/BKDaugherty/buddies/blob/main/src/lib/types.rs

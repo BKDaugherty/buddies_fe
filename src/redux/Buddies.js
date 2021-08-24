@@ -11,6 +11,8 @@ import { buddiesService } from "../api";
 // the buddies slice of the redux store.
 export const BuddiesActions = {
 	getUserData: "buddies/get",
+	createBuddy: "buddies/create",
+	startCreateBuddy: "buddies/start_create",
 };
 
 const buddiesInitialState = {
@@ -21,6 +23,11 @@ const buddiesInitialState = {
 	interactions: {},
 	// Dictionary from buddy-id to an array of interactions they are associated with
 	buddyToInteractionMap: {},
+	// Whether or not the user is creating a buddy
+	buddyPending: false,
+	createBuddy: createAsyncActionInitialState(),
+	// A map from buddy-id to the pending interaction for that buddy
+	pendingInteractions: {},
 };
 
 const getUserDataAction = asyncActionGenerator(
@@ -32,6 +39,44 @@ const getUserDataAction = asyncActionGenerator(
 	{
 		success_logic: (payload, dispatch, getState) => {},
 		failure_logic: (error, dispatch, getState) => {},
+	}
+);
+
+const createBuddyAction = asyncActionGenerator(
+	BuddiesActions.createBuddy,
+	(args, dispatch, getState) => {
+		const { jwt, user_id } = selectAuthInfo(getState());
+		// We are calling the backend directly here. Important
+		// that all keys are snake case
+		// TODO: Add validation to API call to check this somehow?
+		return buddiesService.createBuddy(jwt)({
+			user_id,
+			...args,
+		});
+	},
+	{
+		success_logic: (payload, { args, dispatch, getState }) => {
+			// After successful creation, refresh user data
+			dispatch(buddiesActionGenerator[BuddiesActions.getUserData]());
+		},
+		failure_logic: (error, { args, dispatch, getState }) => {},
+	}
+);
+
+const createBuddyStateUpdateMap = asyncActionStateUpdateMapGenerator(
+	BuddiesActions.createBuddy,
+	"createBuddy",
+	{
+		success_logic: (state, action) => {
+			state.buddyPending = false;
+			return state;
+		},
+		request_logic: (state, action) => {
+			return state;
+		},
+		failure_logic: (state, action) => {
+			return state;
+		},
 	}
 );
 
@@ -52,10 +97,16 @@ const getUserDataStateUpdateMap = asyncActionStateUpdateMapGenerator(
 
 export const buddiesActionStateUpdateMap = {
 	...getUserDataStateUpdateMap,
+	...createBuddyStateUpdateMap,
+	[BuddiesActions.startCreateBuddy]: (state) => {
+		state.buddyPending = true;
+		return state;
+	},
 };
 
 export const buddiesActionGenerator = {
 	...getUserDataAction,
+	...createBuddyAction,
 };
 
 // Exports the reducer to the root reducers module.

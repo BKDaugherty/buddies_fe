@@ -10,6 +10,8 @@ import "./styles/styles.scss";
 
 const { store, persistor } = storeGenerator();
 
+console.log(persistor);
+
 ReactDOM.render(
 	<React.StrictMode>
 		<Provider store={store}>

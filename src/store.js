@@ -1,13 +1,15 @@
 import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
+import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 import thunk from "redux-thunk";
 import rootReducer from "./reducers";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 
 const persistConfig = {
-	key: "root",
+	key: "primary",
 	storage,
+	stateReconciler: autoMergeLevel2,
 };
 
 // On browser refresh, merge stored state in localStorage with the initialState of the root
